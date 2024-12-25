@@ -1,4 +1,4 @@
-import useWallpapers, { Wallpaper } from "@/hooks/useWallpapers";
+import { Wallpaper } from "@/hooks/useWallpapers";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import { ThemedText } from "./ThemedText";

@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useRef } from 'react';
-import { View, Text, StyleSheet, Image, Button, Pressable } from 'react-native';
+import React, { useCallback, useRef } from 'react';
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Wallpaper } from '@/hooks/useWallpapers';
 import { ThemedView } from './ThemedView';

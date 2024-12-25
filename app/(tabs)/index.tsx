@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { DownloadPicture } from "../../components/BottomSheet";
 import useWallpapers, { Wallpaper } from "@/hooks/useWallpapers";
 import SplitView from "@/components/SplitView";
 import Carousel from 'react-native-reanimated-carousel';
 import { useCarousel } from "@/hooks/useCarousel";
 import { LinearGradient } from "expo-linear-gradient"
-import { ThemedText } from "@/components/ThemedText";
-import { AnimatedView } from "react-native-reanimated/lib/typescript/reanimated2/component/View";
 import Animated from "react-native-reanimated";
 import { ThemedSafeAreaView } from "@/components/ThemedSafeAreaView";
+import React from "react";
 
 const TOPBAR_HEIGHT = 250;
 

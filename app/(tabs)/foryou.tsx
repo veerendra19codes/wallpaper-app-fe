@@ -2,9 +2,9 @@ import SplitView from '@/components/SplitView';
 import { ThemedSafeAreaView } from '@/components/ThemedSafeAreaView';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
-import useWallpapers, { useLibraryWallpapers, useLikedWallpapers, useSuggestedWallpapers } from '@/hooks/useWallpapers';
+import { useLibraryWallpapers, useLikedWallpapers, useSuggestedWallpapers } from '@/hooks/useWallpapers';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { SafeAreaView, StyleSheet, Text, View, useColorScheme } from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
 
 const Tab = createMaterialTopTabNavigator();
 

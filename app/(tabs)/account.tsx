@@ -1,18 +1,21 @@
 import { ThemedSafeAreaView } from "@/components/ThemedSafeAreaView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { auth } from "@/config/firebase";
 import { Colors } from "@/constants/Colors";
+import useAuth from "@/hooks/useAuth";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
-import Ionicons from "@expo/vector-icons/Ionicons";
+// import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
+import { signOut, User } from "firebase/auth";
+import React from "react";
 import { Appearance, Pressable, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const theme = useColorScheme() ?? 'light';
 
-
 export default function Account() {
     const theme = useColorScheme() ?? 'light';
+    const { user } = useAuth();
 
     return <ThemedSafeAreaView style={{ flex: 1 }}>
         <ThemedView style={{ flex: 1, flexDirection: "column", gap: 20 }}>
@@ -20,7 +23,9 @@ export default function Account() {
                 <HeaderText text="Panel" />
                 <SubHeaderText text="Sign in to save your data" />
             </ThemedView>
-            <SigninButtons />
+
+            <SigninButtons user={user} />
+
             <ThemedView style={{ width: "100%", flexDirection: "column", gap: 10, justifyContent: "center", alignItems: "center" }}>
                 <HeaderText text="Settings" />
                 <SubHeaderText text="theme" />
@@ -31,7 +36,7 @@ export default function Account() {
                 </ThemedView>
             </ThemedView>
 
-            <About />
+            {/* <About /> */}
         </ThemedView>
 
     </ThemedSafeAreaView>
@@ -79,36 +84,115 @@ function SubHeaderText({ text }: { text: string }) {
     </ThemedText>
 }
 
-function SigninButtons() {
+interface UserProps {
+    user: User | null,
+}
+
+function SigninButtons({ user }: UserProps) {
+
     const theme = useColorScheme() ?? 'light';
 
+    const handleLogout = async () => {
+        await signOut(auth);
+    }
 
-    return <>
-        <ThemedView style={{ flexDirection: "column", gap: 15 }} >
-            <AuthButton label="sign in" icon={<Ionicons
+    // const handleGoogleSignUp = async () => {
+    //     try {
+    //         await GoogleSignin.hasPlayServices();
+    //         const userInfo = await GoogleSignin.signIn();
+    //         console.log("User Info:", userInfo);
+
+    //         const { idToken } = await GoogleSignin.getTokens();
+
+    //         const response = await axios.post(`${API_URL}/signup`, {
+    //             googleId: userInfo.user.id,
+    //             name: userInfo.user.name,
+    //         });
+
+    //         alert(response.data.message);
+    //     } catch (error: any) {
+    //         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+    //             alert('User cancelled the login.');
+    //         } else {
+    //             console.error(error);
+    //         }
+    //     }
+    // };
+
+    // const handleGoogleSignIn = async () => {
+    //     try {
+    //         const userInfo = await GoogleSignin.signIn();
+    //         const { idToken } = await GoogleSignin.getTokens();
+
+    //         const response = await axios.post(`${API_URL}/signin`, {
+    //             googleId: userInfo.user.id,
+    //             name: userInfo.user.name,
+    //         });
+
+    //         await AsyncStorage.setItem('token', response.data.token);
+    //         alert('Login successful!');
+    //     } catch (error) {
+    //         console.error(error);
+    //         alert('Login failed!');
+    //     }
+    // };
+
+    return (
+        <ThemedView style={{ flexDirection: "column", gap: 15, width: "100%", alignItems: "center" }} >
+
+            {/* <Pressable onPress={handleGoogleSignIn}>
+                <AuthButton label="Sign In" icon={<Ionicons
+                name={'logo-google'}
+                size={24}
+                    color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
+                    style={{ paddingRight: 4 }}
+                />} />
+            </Pressable>
+            
+            <Pressable onPress={handleGoogleSignUp}>
+                <AuthButton label="Sign Up" icon={<Ionicons
                 name={'logo-google'}
                 size={24}
                 color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
                 style={{ paddingRight: 4 }}
-            />} />
-            <AuthButton label="sign in" icon={<Ionicons
+                />} />
+                </Pressable> */}
+
+
+            {/* <AuthButton label="sign in" icon={<Ionicons
                 name={'logo-apple'}
                 size={24}
                 color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
                 style={{ paddingRight: 4 }}
-            />} />
+                />} /> */}
+
+            {user ? (
+                <>
+                    <ThemedText>{user?.email}</ThemedText>
+
+                    <Pressable style={styles.logout} onPress={handleLogout}>
+                        <ThemedText style={{ textAlign: "center" }}>Logout</ThemedText>
+                    </Pressable>
+                </>
+            ) :
+
+                <Link href="/(auth)/signin" style={styles.link}>
+                    <ThemedText style={{ fontWeight: "bold", fontSize: 24, flex: 1, paddingVertical: "auto" }}>
+                        Signin
+                    </ThemedText>
+                </Link>
+            }
         </ThemedView>
-    </>
+    )
 }
 
-function AuthButton({ label, icon }: {
+function AuthButton({ label }: {
     label: string,
-    icon: any
 }) {
 
     return <Pressable style={{ width: "100%", alignItems: "center" }}>
-        <ThemedText style={styles.downloadButton} >
-            {icon}
+        <ThemedText style={styles.downloadButton}>
+            {/* {icon} */}
             {label}
         </ThemedText>
     </Pressable>
@@ -131,5 +215,26 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: theme === "light" ? "white" : "black",
     },
-
+    link: {
+        color: "white",
+        width: "50%",
+        textAlign: "center",
+        fontSize: 24,
+        borderWidth: 1,
+        padding: 12,
+        borderColor: "blue",
+        borderRadius: 15
+    },
+    logout: {
+        color: "white",
+        width: "50%",
+        textAlign: "center",
+        display: "flex",
+        justifyContent: "center",
+        fontSize: 24,
+        borderWidth: 1,
+        padding: 12,
+        backgroundColor: "red",
+        borderRadius: 15
+    }
 });
